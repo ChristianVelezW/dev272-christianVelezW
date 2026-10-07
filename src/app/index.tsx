@@ -1,28 +1,30 @@
 import { entries, Entry } from "@/data/entry";
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { useState } from "react";
 
 export default function Index() {
+  const [query, setQuery] = useState("");
+
   return (
     <View style={styles.screen}>
-      <Header/>
       <FlatList
       data={entries}
       keyExtractor={(e) => e.id}
       renderItem={({ item }) => <EntryRow entry={item} />}
-      // ListHeaderComponent={<Header />}
       contentContainerStyle={styles.list}
+      ListHeaderComponent={<Header query={query} setQuery={setQuery} />}
       />
       </View>
   );
 }
 
-function Header() {
+function Header({query, setQuery}: {query: string, setQuery: (text: string) => void}) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Personal Log</Text>
       <View style={styles.row}>
-        <TextInput style={styles.input} placeholder="Search Log" />
-        <Pressable style={styles.button} onPress={() => console.log("Search")}>
+        <TextInput style={styles.input} placeholder="Search Log" value = {query} onChangeText={setQuery} />
+        <Pressable style={styles.button} onPress={() => console.log(query)}>
           <Text style={styles.buttonText}>Go</Text>
         </Pressable>
       </View>
