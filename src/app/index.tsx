@@ -1,28 +1,51 @@
-import { StyleSheet, Text, View } from "react-native";
+import { entries, Entry } from "@/data/entry";
+import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
-// This is the home screen (route "/").
-// Week 1: change the two lines marked 👇, run the app, commit, push.
 export default function Index() {
-  // 👇 Week 1: replace with your name
-  const studentName = "Christian Vélez";
-  // 👇 Week 1: replace with something you want to build this quarter
-  const appIdea = "a personal quick tracker/logger";
+  return (
+    <View style={styles.screen}>
+      <Header/>
+      <FlatList
+      data={entries}
+      keyExtractor={(e) => e.id}
+      renderItem={({ item }) => <EntryRow entry={item} />}
+      // ListHeaderComponent={<Header />}
+      contentContainerStyle={styles.list}
+      />
+      </View>
+  );
+}
 
+function Header() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>DEV 272 · Mobile Application Development</Text>
-      <Text style={styles.body}>Hello, I am {studentName}.</Text>
-      <Text style={styles.body}>This quarter I want to build {appIdea}.</Text>
-      <Text style={styles.hint}>Edit src/app/index.tsx to change this screen.</Text>
+      <Text style={styles.title}>Personal Log</Text>
+      <View style={styles.row}>
+        <TextInput style={styles.input} placeholder="Search Log" />
+        <Pressable style={styles.button} onPress={() => console.log("Search")}>
+          <Text style={styles.buttonText}>Go</Text>
+        </Pressable>
+      </View>
+    </View>
+  );
+}
+
+function EntryRow({entry}: {entry: Entry}) {
+  return (
+    <View style={styles.card}>
+      <View style={styles.cardMain}>
+        <Text style={styles.cardTitle}>{entry.name}</Text>
+        <Text style={styles.cardSub}>{entry.dateCreated.toLocaleString()}</Text>
+        </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex:1
+  },
   container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
     padding: 24,
     gap: 12,
   },
@@ -41,4 +64,49 @@ const styles = StyleSheet.create({
     color: "#6b7280",
     textAlign: "center",
   },
+  row: {
+    flexDirection: "row",
+    gap: 8,
+    alignItems: "center",
+    },
+  input: { 
+      flex: 1, 
+      borderWidth: 1, 
+      borderColor: "#9ca3af", 
+      borderRadius: 8, 
+      padding: 10 
+    },
+  button: { 
+    backgroundColor: "#2563eb", 
+    paddingHorizontal: 16,
+    paddingVertical: 10, 
+    borderRadius: 8,  
+  },
+  buttonText: { 
+    color: "#fff", 
+    fontWeight: "600" 
+  },
+  card: {
+    padding: 12,
+    borderRadius: 8,
+    backgroundColor: "#e5e7eb",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 8,
+  },
+  cardMain: {
+    flex: 1, 
+    gap: 2
+  },
+  cardTitle: {
+    fontWeight: "600"
+  },
+  cardSub: {
+    color: "#6b7280"
+  },
+  list: {
+    padding: 16,
+    gap: 8
+  }
 });

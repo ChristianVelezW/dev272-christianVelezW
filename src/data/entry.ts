@@ -1,6 +1,6 @@
 export type Entry = {
-    id: number;
-    parentId: number;
+    id: string;
+    parentId: string;
     name: string;
     dateCreated: Date;
     dateStart?: Date;
