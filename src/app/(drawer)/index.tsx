@@ -14,7 +14,7 @@ export default function Index() {
       contentContainerStyle={styles.list}
       ListHeaderComponent={<Header query={query} setQuery={setQuery} />}
       />
-      </View>
+    </View>
   );
 }
 
