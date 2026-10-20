@@ -1,6 +1,7 @@
 import { entries, Entry } from "@/data/entry";
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { useState } from "react";
+import { router } from "expo-router";
 
 export default function Index() {
   const [query, setQuery] = useState("");
@@ -34,12 +35,12 @@ function Header({query, setQuery}: {query: string, setQuery: (text: string) => v
 
 function EntryRow({entry}: {entry: Entry}) {
   return (
-    <View style={styles.card}>
+    <Pressable style={styles.card} onPress={() => router.push({ pathname: "/[id]", params: { id: entry.id }})}>
       <View style={styles.cardMain}>
         <Text style={styles.cardTitle}>{entry.name}</Text>
         <Text style={styles.cardSub}>{entry.dateCreated.toLocaleString()}</Text>
         </View>
-    </View>
+    </Pressable>
   );
 }
 
