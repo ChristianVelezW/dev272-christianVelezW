@@ -1,10 +1,13 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Pressable } from 'react-native';
 import { entries } from '../data/entry';
+import { useInProgress } from '../context/InProgressContext';
 
 export default function DetailScreen() {
   const { id } = useLocalSearchParams();
   const entry = entries.find((e) => e.id === id);
+  const { inProgressIds, toggleInProgress } = useInProgress();
+  const isStarted = inProgressIds.includes(id as string);
 
   if (!entry) {
     return (
@@ -14,6 +17,7 @@ export default function DetailScreen() {
     );
   }
 
+  
   return (
     
     <View style={styles.container} >
@@ -25,7 +29,18 @@ export default function DetailScreen() {
       )}
       {entry.dateEnd && (
         <Text style={styles.body}>End: {entry.dateEnd.toLocaleDateString()}</Text>
-      )}    </View>
+      )}
+      <Pressable 
+        style={[styles.button, { backgroundColor: isStarted ? "#ef4444" : "#2563eb", marginTop: 20 }]} 
+        onPress={() => toggleInProgress(id as string)}
+      >
+        <Text style={styles.buttonText}>
+          {isStarted ? "Mark as Stopped" : "Mark as In Progress"}
+        </Text>
+      </Pressable>
+    </View>
+    
+    
   );
 }
 
@@ -41,5 +56,17 @@ const styles = StyleSheet.create({
   },
   body: {
     fontSize: 18,
+  },
+  button: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
   }
 });

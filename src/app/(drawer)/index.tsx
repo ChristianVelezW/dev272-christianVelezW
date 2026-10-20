@@ -1,7 +1,8 @@
 import { entries, Entry } from "@/data/entry";
-import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import { useState } from "react";
 import { router } from "expo-router";
+import { useState } from "react";
+import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { useInProgress } from "../../context/InProgressContext";
 
 export default function Index() {
   const [query, setQuery] = useState("");
@@ -34,12 +35,23 @@ function Header({query, setQuery}: {query: string, setQuery: (text: string) => v
 }
 
 function EntryRow({entry}: {entry: Entry}) {
+
+  const { inProgressIds } = useInProgress();
+  const isStarted = inProgressIds.includes(entry.id);
+
   return (
-    <Pressable style={styles.card} onPress={() => router.push({ pathname: "/[id]", params: { id: entry.id }})}>
+    <Pressable 
+      style={[styles.card, isStarted && { borderColor: "#2563eb", borderWidth: 2 }]} 
+      onPress={() => router.push({ pathname: "/[id]", params: { id: entry.id }})}>
       <View style={styles.cardMain}>
         <Text style={styles.cardTitle}>{entry.name}</Text>
         <Text style={styles.cardSub}>{entry.dateCreated.toLocaleString()}</Text>
-        </View>
+      </View>
+      {isStarted && (
+        <Text style={{ color: "#2563eb", fontWeight: "bold", fontSize: 12 }}>
+          IN PROGRESS
+        </Text>
+      )}
     </Pressable>
   );
 }
