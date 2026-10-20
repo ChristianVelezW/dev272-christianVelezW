@@ -1,16 +1,18 @@
-import { entries, Entry } from "@/data/entry";
+import { Entry } from "@/data/entry";
 import { router } from "expo-router";
 import { useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { useInProgress } from "../../context/InProgressContext";
+import { useActivities } from '../../context/ActivityContext';
 
 export default function Index() {
   const [query, setQuery] = useState("");
-
+  const { activities } = useActivities();
+  
   return (
     <View style={styles.screen}>
       <FlatList
-      data={entries}
+      data={activities}
       keyExtractor={(e) => e.id}
       renderItem={({ item }) => <EntryRow entry={item} />}
       contentContainerStyle={styles.list}
@@ -28,6 +30,9 @@ function Header({query, setQuery}: {query: string, setQuery: (text: string) => v
         <TextInput style={styles.input} placeholder="Search Log" value = {query} onChangeText={setQuery} />
         <Pressable style={styles.button} onPress={() => console.log(query)}>
           <Text style={styles.buttonText}>Go</Text>
+        </Pressable>
+        <Pressable style={styles.button} onPress={() => router.push('/add')}>
+          <Text style={styles.buttonText}>Add Activity</Text>
         </Pressable>
       </View>
     </View>

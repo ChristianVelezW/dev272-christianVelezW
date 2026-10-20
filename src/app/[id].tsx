@@ -1,11 +1,12 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { StyleSheet, Text, View, Pressable } from 'react-native';
-import { entries } from '../data/entry';
 import { useInProgress } from '../context/InProgressContext';
+import { useActivities } from '../context/ActivityContext';
 
 export default function DetailScreen() {
   const { id } = useLocalSearchParams();
-  const entry = entries.find((e) => e.id === id);
+  const { activities } = useActivities()
+  const entry = activities.find((e) => e.id === id);
   const { inProgressIds, toggleInProgress } = useInProgress();
   const isStarted = inProgressIds.includes(id as string);
 
@@ -23,7 +24,11 @@ export default function DetailScreen() {
     <View style={styles.container} >
       <Stack.Screen options={{ title: "Details"}} />
       <Text style={styles.title}>{entry.name}</Text>
+      {entry.notes !== "" && (
+        <Text style={styles.body}>Notes: {entry.notes}</Text>
+      )}
       <Text style={styles.body}>Created: {entry.dateCreated.toLocaleDateString()}</Text>
+      <Text style={styles.body}>Priority: {entry.priority}</Text>
       {entry.dateStart && (
         <Text style={styles.body}>Start: {entry.dateStart.toLocaleDateString()}</Text>
       )}

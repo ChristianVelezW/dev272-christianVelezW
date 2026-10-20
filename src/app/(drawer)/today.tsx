@@ -1,13 +1,15 @@
-import { entries, Entry } from "@/data/entry";
+import { Entry } from "@/data/entry";
 import { router } from "expo-router";
 import { useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { useInProgress } from "../../context/InProgressContext";
+import { useActivities } from '../../context/ActivityContext';
 
 export default function TodayScreen() {
   const [query, setQuery] = useState("");
+  const { activities } = useActivities();
 
-  const todayEntries = entries.filter((entry) => {
+  const todayEntries = activities.filter((entry) => {
     return entry.dateCreated.toLocaleDateString() === new Date().toLocaleDateString();
   })
 
