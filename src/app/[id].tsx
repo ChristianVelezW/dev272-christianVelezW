@@ -1,14 +1,19 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useActivitiesQuery } from '../api/useActivitiesQuery';
 import { useInProgress } from '../context/InProgressContext';
-import { useActivities } from '../context/ActivityContext';
 
 export default function DetailScreen() {
   const { id } = useLocalSearchParams();
-  const { activities } = useActivities()
-  const entry = activities.find((e) => e.id === id);
   const { inProgressIds, toggleInProgress } = useInProgress();
+  const { data: activities, isPending } = useActivitiesQuery();
   const isStarted = inProgressIds.includes(id as string);
+
+  if (isPending) {
+    return <ActivityIndicator size="large" style={{flex: 1 }} />
+  }
+
+  const entry = activities?.find((e) => e.id === id);
 
   if (!entry) {
     return (

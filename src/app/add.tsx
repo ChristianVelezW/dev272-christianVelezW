@@ -3,8 +3,8 @@ import { Stack, router } from 'expo-router';
 import { Controller, useForm } from 'react-hook-form';
 import { Pressable, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import { z } from 'zod';
-import { useActivities } from '../context/ActivityContext';
 import { useInProgress } from '../context/InProgressContext';
+import { useAddActivityMutation } from '../api/useActivitiesQuery';
 
 const activitySchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -26,25 +26,16 @@ export default function AddScreen() {
     }
   });
 
-  const { addActivity } = useActivities();
+  const { mutate: createActivity, isPending } = useAddActivityMutation();
   const { toggleInProgress } = useInProgress();
 
-  const onSubmit = (data: ActivityFormData) => {
-    const newId = Date.now().toString();
-    
-    const newEntry = {
-      ...data,
-      id: newId,
-      parentId: "0",
-      dateCreated: new Date(),
-    };
-    addActivity(newEntry);
-
-    if (data.isInProgress) {
-      toggleInProgress(newId);
-    }
-    router.back(); 
-  };  
+const onSubmit = (data: ActivityFormData) => {
+    createActivity(data, {
+      onSuccess: () => {
+        router.back();
+      }
+    });
+  };
   
 return (
     <View style={styles.container}>

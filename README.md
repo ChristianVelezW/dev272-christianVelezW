@@ -6,6 +6,54 @@ This is the starting point for every individual assignment in Weeks 1–6. You c
 
 **Stack:** Expo SDK 57 · React Native 0.86 · TypeScript · Expo Router · pnpm
 
+## 0. Supabase Setup
+
+1. In your project's /.env file, add the Project URL and Publishable Key from your Supabase as follows, replacing the text in <> including brackets.
+
+**Variables for .env file:**
+~~~
+EXPO_PUBLIC_SUPABASE_URL= <project URL>
+EXPO_PUBLIC_SUPABASE_KEY= <public Key>
+~~~
+> [!IMPORTANT] Ensure that your .env file is included in .gitignore which will prevent it from being published publicly to your repository.
+
+2. In your Supabase project's SQL Editor run the following code to create the table and populate it with 5 seeds.
+
+**Table Creation SQL**
+~~~sql
+create table activities (
+  id uuid default gen_random_uuid() primary key,
+  parent_id text,
+  name text not null,
+  notes text,
+  priority integer not null,
+  is_in_progress boolean default false,
+  date_created timestamptz default now(),
+  date_start timestamptz,
+  date_end timestamptz,
+  constraint priority_range check (priority >= 1 and priority <= 5)
+);
+
+grant select, insert on activities to anon;
+alter table activities enable row level security;
+create policy "Anyone can read activities"
+  on activities for select
+  to anon
+  using (true);
+
+create policy "Anyone can add activities"
+  on activities for insert
+  to anon
+  with check (true);
+
+  insert into activities (name, notes, priority, is_in_progress, date_start, date_end) values
+  ('DEV272 App Work', 'Need to finish Phase 3 of the assignment.', 1, true, '2026-10-19T11:30:00Z', null),
+  ('Walk', 'Listened to an audiobook.', 4, false, '2026-10-19T16:00:00Z', '2026-10-19T16:45:00Z'),
+  ('Cleaning', 'General weekend chores.', 3, false, '2026-10-20T10:00:00Z', null),
+  ('Lunch', '', 5, false, '2026-10-20T13:15:00Z', null),
+  ('Grocery Shopping', 'Need milk, eggs, and coffee.', 2, false, null, null);
+  ~~~
+
 > [!IMPORTANT]
 > **AI tools tutor here; they do not write your code.** Read [section 10](#10-ai-tools-read-this-before-you-ask-an-ai-for-help) before you ask Copilot, Claude, ChatGPT, or Cursor for help. Deleting or editing the AI files in this repo costs 50% on every assignment.
 

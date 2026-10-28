@@ -1,22 +1,33 @@
-import { Entry } from "@/data/entry";
+import { Entry } from "../../types";
 import { router } from "expo-router";
 import { useState } from "react";
-import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { FlatList, Pressable, RefreshControl, StyleSheet, Text, TextInput, View } from "react-native";
+import { useActivitiesQuery } from '../../api/useActivitiesQuery';
 import { useInProgress } from "../../context/InProgressContext";
-import { useActivities } from '../../context/ActivityContext';
 
 export default function Index() {
   const [query, setQuery] = useState("");
-  const { activities } = useActivities();
-  
+  const {data: activities, isPending, isError, isRefetching, refetch } = useActivitiesQuery();
+  if (isError) {
+    return <Text style={styles.hint}>Error fetching activities.</Text>;
+  }
+  const filteredActivities = activities?.filter((entry) => {
+    return entry.name.toLowerCase().includes(query.toLowerCase());
+  });
+
   return (
     <View style={styles.screen}>
       <FlatList
-      data={activities}
+      data={filteredActivities}
       keyExtractor={(e) => e.id}
       renderItem={({ item }) => <EntryRow entry={item} />}
       contentContainerStyle={styles.list}
       ListHeaderComponent={<Header query={query} setQuery={setQuery} />}
+      refreshControl={
+        <RefreshControl 
+          refreshing={isRefetching} 
+          onRefresh={refetch}
+        />}
       />
     </View>
   );
@@ -28,9 +39,6 @@ function Header({query, setQuery}: {query: string, setQuery: (text: string) => v
       <Text style={styles.title}>Personal Log</Text>
       <View style={styles.row}>
         <TextInput style={styles.input} placeholder="Search Log" value = {query} onChangeText={setQuery} />
-        <Pressable style={styles.button} onPress={() => console.log(query)}>
-          <Text style={styles.buttonText}>Go</Text>
-        </Pressable>
         <Pressable style={styles.button} onPress={() => router.push('/add')}>
           <Text style={styles.buttonText}>Add Activity</Text>
         </Pressable>

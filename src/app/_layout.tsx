@@ -1,15 +1,18 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from "expo-router";
 import { InProgressProvider } from "../context/InProgressContext";
-import { ActivityProvider } from "../context/ActivityContext";
+
+const queryClient = new QueryClient();
 
 export default function RootLayout() {
   return (
-    <ActivityProvider>
+    <QueryClientProvider client={queryClient}>
       <InProgressProvider>
         <Stack>
           <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+          <Stack.Screen name="add" options={{ title: "Add Activity", presentation: "modal" }} />
         </Stack>
       </InProgressProvider>
-    </ActivityProvider>
+    </QueryClientProvider>
   );
 }

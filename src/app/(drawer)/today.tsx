@@ -1,22 +1,28 @@
-import { Entry } from "@/data/entry";
 import { router } from "expo-router";
 import { useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { useInProgress } from "../../context/InProgressContext";
-import { useActivities } from '../../context/ActivityContext';
+import { useActivitiesQuery } from '../../api/useActivitiesQuery';
+import { ActivityIndicator } from 'react-native';
+import { Entry } from "../../types";
 
 export default function TodayScreen() {
   const [query, setQuery] = useState("");
-  const { activities } = useActivities();
-
-  const todayEntries = activities.filter((entry) => {
-    return entry.dateCreated.toLocaleDateString() === new Date().toLocaleDateString();
-  })
+  const { data: activities, isPending, isError } = useActivitiesQuery();
+  if (isError) {
+    return <Text style={styles.hint}>Error fetching activities.</Text>;
+  }
+  const filteredActivities = activities?.filter((entry) => {
+    const matchesSearch = entry.name.toLowerCase().includes(query.toLowerCase());
+    const matchesToday = entry.dateCreated.toLocaleDateString() === new Date().toLocaleDateString();
+    
+    return matchesSearch && matchesToday;
+  });
 
   return (
     <View style={styles.screen}>
       <FlatList
-      data={todayEntries}
+      data={filteredActivities}
       keyExtractor={(e) => e.id}
       renderItem={({ item }) => <EntryRow entry={item} />}
       contentContainerStyle={styles.list}
@@ -29,11 +35,11 @@ export default function TodayScreen() {
 function Header({query, setQuery}: {query: string, setQuery: (text: string) => void}) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Personal Log</Text>
+      <Text style={styles.title}>Today's Log</Text>
       <View style={styles.row}>
         <TextInput style={styles.input} placeholder="Search Log" value = {query} onChangeText={setQuery} />
-        <Pressable style={styles.button} onPress={() => console.log(query)}>
-          <Text style={styles.buttonText}>Go</Text>
+        <Pressable style={styles.button} onPress={() => router.push('/add')}>
+          <Text style={styles.buttonText}>Add Activity</Text>
         </Pressable>
       </View>
     </View>
