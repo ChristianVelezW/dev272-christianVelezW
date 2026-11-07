@@ -5,6 +5,7 @@ import { useInProgress } from "../../context/InProgressContext";
 import { useActivitiesQuery } from '../../api/useActivitiesQuery';
 import { ActivityIndicator } from 'react-native';
 import { Entry } from "../../types";
+import { EntryRow } from "../../components/EntryRow";
 
 export default function TodayScreen() {
   const [query, setQuery] = useState("");
@@ -43,28 +44,6 @@ function Header({query, setQuery}: {query: string, setQuery: (text: string) => v
         </Pressable>
       </View>
     </View>
-  );
-}
-
-function EntryRow({entry}: {entry: Entry}) {
-
-  const { inProgressIds } = useInProgress();
-  const isStarted = inProgressIds.includes(entry.id);
-
-  return (
-    <Pressable 
-      style={[styles.card, isStarted && { borderColor: "#2563eb", borderWidth: 2 }]} 
-      onPress={() => router.push({ pathname: "/[id]", params: { id: entry.id }})}>
-      <View style={styles.cardMain}>
-        <Text style={styles.cardTitle}>{entry.name}</Text>
-        <Text style={styles.cardSub}>{entry.dateCreated.toLocaleString()}</Text>
-      </View>
-      {isStarted && (
-        <Text style={{ color: "#2563eb", fontWeight: "bold", fontSize: 12 }}>
-          IN PROGRESS
-        </Text>
-      )}
-    </Pressable>
   );
 }
 
@@ -112,25 +91,6 @@ const styles = StyleSheet.create({
   buttonText: { 
     color: "#fff", 
     fontWeight: "600" 
-  },
-  card: {
-    padding: 12,
-    borderRadius: 8,
-    backgroundColor: "#e5e7eb",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: 8,
-  },
-  cardMain: {
-    flex: 1, 
-    gap: 2
-  },
-  cardTitle: {
-    fontWeight: "600"
-  },
-  cardSub: {
-    color: "#6b7280"
   },
   list: {
     padding: 16,
