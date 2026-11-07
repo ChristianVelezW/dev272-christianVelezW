@@ -1,0 +1,4 @@
+pnpm run lint
+pnpm run format:check
+pnpm exec tsc --noEmit
+pnpm test
