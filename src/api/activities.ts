@@ -1,11 +1,11 @@
 import { Entry } from "../types";
-import { supabase } from '../lib/supabase';
+import { supabase } from "../lib/supabase";
 
 export const fetchActivities = async (): Promise<Entry[]> => {
   const { data, error } = await supabase
-    .from('activities')
-    .select('*')
-    .order('date_created', { ascending: false });
+    .from("activities")
+    .select("*")
+    .order("date_created", { ascending: false });
 
   if (error) {
     throw new Error(error.message);
@@ -25,15 +25,17 @@ export const fetchActivities = async (): Promise<Entry[]> => {
 };
 
 export const createActivity = async (
-  newActivity: Omit<Entry, 'id' | 'dateCreated' | 'parentId'>
+  newActivity: Omit<Entry, "id" | "dateCreated" | "parentId">,
 ): Promise<void> => {
-  const { error } = await supabase.from('activities').insert({
-    name: newActivity.name,
-    notes: newActivity.notes,
-    priority: newActivity.priority,
-    is_in_progress: newActivity.isInProgress,
-  })
-  .select();
+  const { error } = await supabase
+    .from("activities")
+    .insert({
+      name: newActivity.name,
+      notes: newActivity.notes,
+      priority: newActivity.priority,
+      is_in_progress: newActivity.isInProgress,
+    })
+    .select();
 
   if (error) {
     throw new Error(error.message);

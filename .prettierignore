@@ -1,0 +1,8 @@
+node_modules
+.expo
+dist
+coverage
+pnpm-lock.yaml
+codebase.txt
+*.md
+*.json

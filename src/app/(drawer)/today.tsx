@@ -1,45 +1,64 @@
 import { router } from "expo-router";
 import { useState } from "react";
-import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import { useInProgress } from "../../context/InProgressContext";
-import { useActivitiesQuery } from '../../api/useActivitiesQuery';
-import { ActivityIndicator } from 'react-native';
-import { Entry } from "../../types";
+import {
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import { useActivitiesQuery } from "../../api/useActivitiesQuery";
 import { EntryRow } from "../../components/EntryRow";
 
 export default function TodayScreen() {
   const [query, setQuery] = useState("");
-  const { data: activities, isPending, isError } = useActivitiesQuery();
+  const { data: activities, isError } = useActivitiesQuery();
   if (isError) {
     return <Text style={styles.hint}>Error fetching activities.</Text>;
   }
   const filteredActivities = activities?.filter((entry) => {
-    const matchesSearch = entry.name.toLowerCase().includes(query.toLowerCase());
-    const matchesToday = entry.dateCreated.toLocaleDateString() === new Date().toLocaleDateString();
-    
+    const matchesSearch = entry.name
+      .toLowerCase()
+      .includes(query.toLowerCase());
+    const matchesToday =
+      entry.dateCreated.toLocaleDateString() ===
+      new Date().toLocaleDateString();
+
     return matchesSearch && matchesToday;
   });
 
   return (
     <View style={styles.screen}>
       <FlatList
-      data={filteredActivities}
-      keyExtractor={(e) => e.id}
-      renderItem={({ item }) => <EntryRow entry={item} />}
-      contentContainerStyle={styles.list}
-      ListHeaderComponent={<Header query={query} setQuery={setQuery} />}
+        data={filteredActivities}
+        keyExtractor={(e) => e.id}
+        renderItem={({ item }) => <EntryRow entry={item} />}
+        contentContainerStyle={styles.list}
+        ListHeaderComponent={<Header query={query} setQuery={setQuery} />}
       />
     </View>
   );
 }
 
-function Header({query, setQuery}: {query: string, setQuery: (text: string) => void}) {
+function Header({
+  query,
+  setQuery,
+}: {
+  query: string;
+  setQuery: (text: string) => void;
+}) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Today's Log</Text>
+      <Text style={styles.title}>{"Today's Log"}</Text>
       <View style={styles.row}>
-        <TextInput style={styles.input} placeholder="Search Log" value = {query} onChangeText={setQuery} />
-        <Pressable style={styles.button} onPress={() => router.push('/add')}>
+        <TextInput
+          style={styles.input}
+          placeholder="Search Log"
+          value={query}
+          onChangeText={setQuery}
+        />
+        <Pressable style={styles.button} onPress={() => router.push("/add")}>
           <Text style={styles.buttonText}>Add Activity</Text>
         </Pressable>
       </View>
@@ -49,7 +68,7 @@ function Header({query, setQuery}: {query: string, setQuery: (text: string) => v
 
 const styles = StyleSheet.create({
   screen: {
-    flex:1
+    flex: 1,
   },
   container: {
     padding: 24,
@@ -74,26 +93,26 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 8,
     alignItems: "center",
-    },
-  input: { 
-      flex: 1, 
-      borderWidth: 1, 
-      borderColor: "#9ca3af", 
-      borderRadius: 8, 
-      padding: 10 
-    },
-  button: { 
-    backgroundColor: "#2563eb", 
-    paddingHorizontal: 16,
-    paddingVertical: 10, 
-    borderRadius: 8,  
   },
-  buttonText: { 
-    color: "#fff", 
-    fontWeight: "600" 
+  input: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "#9ca3af",
+    borderRadius: 8,
+    padding: 10,
+  },
+  button: {
+    backgroundColor: "#2563eb",
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "600",
   },
   list: {
     padding: 16,
-    gap: 8
-  }
+    gap: 8,
+  },
 });

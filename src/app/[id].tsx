@@ -1,7 +1,13 @@
-import { Stack, useLocalSearchParams } from 'expo-router';
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
-import { useActivitiesQuery } from '../api/useActivitiesQuery';
-import { useInProgress } from '../context/InProgressContext';
+import { Stack, useLocalSearchParams } from "expo-router";
+import {
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { useActivitiesQuery } from "../api/useActivitiesQuery";
+import { useInProgress } from "../context/InProgressContext";
 
 export default function DetailScreen() {
   const { id } = useLocalSearchParams();
@@ -10,7 +16,7 @@ export default function DetailScreen() {
   const isStarted = inProgressIds.includes(id as string);
 
   if (isPending) {
-    return <ActivityIndicator size="large" style={{flex: 1 }} />
+    return <ActivityIndicator size="large" style={{ flex: 1 }} />;
   }
 
   const entry = activities?.find((e) => e.id === id);
@@ -23,25 +29,32 @@ export default function DetailScreen() {
     );
   }
 
-  
   return (
-    
-    <View style={styles.container} >
-      <Stack.Screen options={{ title: "Details"}} />
+    <View style={styles.container}>
+      <Stack.Screen options={{ title: "Details" }} />
       <Text style={styles.title}>{entry.name}</Text>
       {entry.notes !== "" && (
         <Text style={styles.body}>Notes: {entry.notes}</Text>
       )}
-      <Text style={styles.body}>Created: {entry.dateCreated.toLocaleDateString()}</Text>
+      <Text style={styles.body}>
+        Created: {entry.dateCreated.toLocaleDateString()}
+      </Text>
       <Text style={styles.body}>Priority: {entry.priority}</Text>
       {entry.dateStart && (
-        <Text style={styles.body}>Start: {entry.dateStart.toLocaleDateString()}</Text>
+        <Text style={styles.body}>
+          Start: {entry.dateStart.toLocaleDateString()}
+        </Text>
       )}
       {entry.dateEnd && (
-        <Text style={styles.body}>End: {entry.dateEnd.toLocaleDateString()}</Text>
+        <Text style={styles.body}>
+          End: {entry.dateEnd.toLocaleDateString()}
+        </Text>
       )}
-      <Pressable 
-        style={[styles.button, { backgroundColor: isStarted ? "#ef4444" : "#2563eb", marginTop: 20 }]} 
+      <Pressable
+        style={[
+          styles.button,
+          { backgroundColor: isStarted ? "#ef4444" : "#2563eb", marginTop: 20 },
+        ]}
         onPress={() => toggleInProgress(id as string)}
       >
         <Text style={styles.buttonText}>
@@ -49,8 +62,6 @@ export default function DetailScreen() {
         </Text>
       </Pressable>
     </View>
-    
-    
   );
 }
 
@@ -71,12 +82,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonText: {
     color: "#fff",
     fontWeight: "bold",
     fontSize: 16,
-  }
+  },
 });

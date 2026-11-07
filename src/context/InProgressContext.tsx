@@ -1,14 +1,22 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 type InProgressContextType = {
   inProgressIds: string[];
   toggleInProgress: (id: string) => void;
 };
 
-const InProgressContext = createContext<InProgressContextType | undefined>(undefined);
+const InProgressContext = createContext<InProgressContextType | undefined>(
+  undefined,
+);
 
-const STORAGE_KEY = '@activity_tracker_in_progress';
+const STORAGE_KEY = "@activity_tracker_in_progress";
 
 export function InProgressProvider({ children }: { children: ReactNode }) {
   const [inProgressIds, setInProgressIds] = useState<string[]>([]);
@@ -44,10 +52,10 @@ export function InProgressProvider({ children }: { children: ReactNode }) {
   }, [inProgressIds, isLoaded]);
 
   const toggleInProgress = (id: string) => {
-    setInProgressIds((prev) => 
-      prev.includes(id) 
+    setInProgressIds((prev) =>
+      prev.includes(id)
         ? prev.filter((existingId) => existingId !== id)
-        : [...prev, id]
+        : [...prev, id],
     );
   };
 

@@ -1,4 +1,4 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import { InProgressProvider } from "../context/InProgressContext";
 
@@ -10,7 +10,10 @@ export default function RootLayout() {
       <InProgressProvider>
         <Stack>
           <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
-          <Stack.Screen name="add" options={{ title: "Add Activity", presentation: "modal" }} />
+          <Stack.Screen
+            name="add"
+            options={{ title: "Add Activity", presentation: "modal" }}
+          />
         </Stack>
       </InProgressProvider>
     </QueryClientProvider>
