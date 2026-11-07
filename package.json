@@ -68,6 +68,9 @@
     "setupFiles": [
       "./jest.setup.ts"
     ],
+    "globals": {
+      "IS_REACT_ACT_ENVIRONMENT": true
+    },
     "moduleNameMapper": {
       "^react-native/setup-env$": "react-native/Libraries/Core/InitializeCore",
       "^react-native/asset-registry$": "react-native/Libraries/Image/AssetRegistry"
