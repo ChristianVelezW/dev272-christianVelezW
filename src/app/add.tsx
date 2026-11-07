@@ -2,18 +2,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Stack, router } from 'expo-router';
 import { Controller, useForm } from 'react-hook-form';
 import { Pressable, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
-import { z } from 'zod';
+import { activitySchema, ActivityFormData } from '../utils/activity.schema';
 import { useInProgress } from '../context/InProgressContext';
 import { useAddActivityMutation } from '../api/useActivitiesQuery';
 
-const activitySchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  notes: z.string(),
-  priority: z.number().min(1, "Must be at least 1").max(5, "Max is 5"),
-  isInProgress: z.boolean(),
-});
 
-type ActivityFormData = z.infer<typeof activitySchema>;
 
 export default function AddScreen() {
   const { control, handleSubmit, formState: { errors } } = useForm<ActivityFormData>({
