@@ -10,7 +10,7 @@ describe("activitySchema validation", () => {
 
   test("accepts a completely valid activity form payload", () => {
     const result = activitySchema.safeParse(validActivity);
-    expect(result.success).toBe(false);
+    expect(result.success).toBe(true);
     if (result.success) {
       expect(result.data.name).toBe("Study DEV272");
       expect(result.data.priority).toBe(3);

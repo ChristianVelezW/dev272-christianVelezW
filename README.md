@@ -54,6 +54,15 @@ create policy "Anyone can add activities"
   ('Grocery Shopping', 'Need milk, eggs, and coffee.', 2, false, null, null);
   ~~~
 
+### Scripts
+
+- `pnpm run lint`: Runs ESLint across all TypeScript source and test files.
+- `pnpm run format`: Formats all files using Prettier.
+- `pnpm run format:check`: Verifies code formatting against `.prettierrc` rules without making changes.
+- `pnpm exec tsc --noEmit`: Performs a strict TypeScript type check without emitting build artifacts.
+- `pnpm test`: Runs all Jest unit and integration test suites.
+- `pnpm start`: Starts the Expo local development server.
+
 > [!IMPORTANT]
 > **AI tools tutor here; they do not write your code.** Read [section 10](#10-ai-tools-read-this-before-you-ask-an-ai-for-help) before you ask Copilot, Claude, ChatGPT, or Cursor for help. Deleting or editing the AI files in this repo costs 50% on every assignment.
 
